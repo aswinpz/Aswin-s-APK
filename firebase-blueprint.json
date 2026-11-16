@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "ShoeItem": {
+      "title": "ShoeItem",
+      "description": "A footwear SKU inventory record mapping product barcodes and SKU to a warehouse bin location.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID."
+        },
+        "sku": {
+          "type": "string",
+          "description": "Footwear SKU code from the warehouse stock sheet."
+        },
+        "binNumber": {
+          "type": "string",
+          "description": "Warehouse bin location identifier (e.g., A-12, B-04-2)."
+        },
+        "modelName": {
+          "type": "string",
+          "description": "Human-readable shoe model name or brand/title."
+        },
+        "barcodes": {
+          "type": "array",
+          "description": "Product barcode strings (UPC/EAN/Code128/QR) linked to this SKU."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Current stock unit count in this bin."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional warehouse or sizing notes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when record was created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when record was last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "sku",
+        "binNumber",
+        "modelName",
+        "barcodes",
+        "quantity",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/shoe_items/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/ShoeItem"
+      },
+      "description": "User-scoped footwear SKU, bin location, and linked product barcodes."
+    }
+  }
+}

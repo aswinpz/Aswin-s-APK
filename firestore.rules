@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidShoeItem(data) {
+      return data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.sku is string && data.sku.size() >= 1 && data.sku.size() <= 80 &&
+             data.binNumber is string && data.binNumber.size() >= 1 && data.binNumber.size() <= 40 &&
+             data.modelName is string && data.modelName.size() <= 120 &&
+             data.barcodes is list && data.barcodes.size() <= 20 &&
+             (data.barcodes.size() == 0 || (data.barcodes[0] is string && data.barcodes[0].size() >= 1 && data.barcodes[0].size() <= 80)) &&
+             data.quantity is int && data.quantity >= 0 && data.quantity <= 1000000 &&
+             data.notes is string && data.notes.size() <= 240;
+    }
+
+    match /users/{userId}/shoe_items/{itemId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(itemId);
+      allow list: if isSignedIn() && request.auth.uid == userId;
+
+      allow create: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(itemId) &&
+                       incoming().userId == request.auth.uid &&
+                       incoming().keys().hasAll(['userId', 'sku', 'binNumber', 'modelName', 'barcodes', 'quantity', 'notes', 'createdAt', 'updatedAt']) &&
+                       incoming().keys().hasOnly(['userId', 'sku', 'binNumber', 'modelName', 'barcodes', 'quantity', 'notes', 'createdAt', 'updatedAt']) &&
+                       incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                       incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                       isValidShoeItem(incoming());
+
+      allow update: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(itemId) &&
+                       isValidShoeItem(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['sku', 'binNumber', 'modelName', 'barcodes', 'quantity', 'notes', 'updatedAt']);
+
+      allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(itemId);
+    }
+  }
+}

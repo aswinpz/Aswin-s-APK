@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ShoeBin</string>
+    <string name="tagline">Footwear Bin &amp; Barcode Inventory</string>
+    <string name="sign_in_title">Welcome to ShoeBin</string>
+    <string name="sign_in_subtitle">Scan product barcodes to locate shoe bins instantly, sync Excel stock sheets, and manage SKU locations across devices.</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_inventory">Inventory</string>
+    <string name="nav_import">Import</string>
+    <string name="toggle_theme_cd">Switch between light and dark theme</string>
+    <string name="sign_out">Sign out</string>
+    <string name="camera_permission_title">Camera Access Needed</string>
+    <string name="camera_permission_body">Grant camera permission to scan shoe box barcodes in real time, or type a barcode manually above.</string>
+    <string name="grant_camera_permission">Enable Camera</string>
+    <string name="scan_hint">Enter barcode or SKU</string>
+    <string name="bin_label">BIN</string>
+    <string name="add_model">Add Model</string>
+    <string name="edit_item">Edit Details</string>
+    <string name="link_to_sku">Link to SKU</string>
+    <string name="import_excel_csv">Choose Excel (.xlsx) or CSV</string>
+    <string name="fetch_from_url">Fetch &amp; Preview Sheet</string>
+    <string name="export_csv">Export Inventory CSV</string>
+</resources>

@@ -1,0 +1,6 @@
+{
+  "name": "ShoeBin",
+  "description": "Footwear warehouse inventory manager that matches scanned product barcodes to SKUs and bin locations, supports Excel/CSV stock sheet import, bin editing, and dark/light themes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
